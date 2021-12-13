@@ -31,3 +31,4 @@ Okta expects to receive `200` responses from the handler endpoints regardless of
 3. Fetch API key value: `aws apigateway get-api-keys --include-values` (if multiple, choose the one you just created)
 4. Construct the url from the output of Step 2: `https://abc123.execute-api.us-west-1.amazonaws.com/token` and add a header `x-api-key` with the API key value from (3)
 5. Send a `POST` request to the endpoint: `curl -X POST -H "x-api-key:{api-key-value}" https://{api-id}.execute-api.{region}.amazonaws.com/token`
+   * Note that you may need to append the stage to the url (e.g. prod) after amazonaws.com in your endpoint.
