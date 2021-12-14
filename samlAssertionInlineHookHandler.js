@@ -1,5 +1,23 @@
+function Get(yourUrl){
+    var Httpreq = new XMLHttpRequest(); // a new request
+    Httpreq.open("GET",yourUrl,false);
+    Httpreq.send(null);
+    return Httpreq.responseText;          
+}
+
 exports.handler = (event, context, callback) => {
     const oktaRequestBody = event.body;
+
+    // Read mock data from files
+    let mockDataURL = "https://s3.amazonaws.com/mearthgov.com-web-2021-12-13/mock_data.json"
+    let users = JSON.parse(Get(mockDataURL));
+
+    // Find User secret attribute
+    const samlEmailAddress = oktaRequestBody.data.context.user.profile.login;
+    var mockDirUser = users.users.filter(u => u.email === samlEmailAddress);
+    var userSecretData = mockDirUser[0].secret
+    var secretValue = (userSecretData != "" ? userSecretData : "GENERIC_SECRET_VALUE");
+
     // Example oktaRequestBody:
     // {
     //     "source": "https://${yourOktaDomain}/app/saml20app_1/exkth8lMzFm0HZOTU0g3/sso/saml",
@@ -171,27 +189,51 @@ exports.handler = (event, context, callback) => {
         //
         // See https://developer.okta.com/docs/reference/saml-hook/#commands
         // for information on acceptable commands in the response
+        //"commands": [
+        //    {
+        //        "type": "com.okta.assertion.patch",
+        //        "value": [
+        //            {
+        //                "op": "replace",
+        //                "path": "/claims/http:~1~1schemas.xmlsoap.org~1ws~12005~105~1identity~1claims~1foo/attributeValues/0/value",
+        //                "value": "replacementValue"
+        //            },
+        //            {
+        //                "op": "replace",
+        //                "path": "/claims/http:~1~1schemas.xmlsoap.org~1ws~12005~105~1identity~1claims~1foo/attributes",
+        //                "value": {
+        //                    "attributes": {
+        //                        "NameFormat": "urn:oasis:names:tc:SAML:2.0:attrname-format:basic"
+        //                    }
+        //                }
+        //            },
+        //            {
+        //                "op": "add",
+        //                "path": "/claims/http:~1~1schemas.xmlsoap.org~1ws~12005~105~1identity~1claims~1bar",
+        //                "value": {
+        //                    "attributes": {
+        //                        "NameFormat": "urn:oasis:names:tc:SAML:2.0:attrname-format:basic"
+        //                    },
+        //                    "attributeValues": [
+        //                        {
+        //                            "attributes": {
+        //                                "xsi:type": "xs:string"
+        //                            },
+        //                            "value": "bearer"
+        //                        }
+        //                    ]
+        //                }
+        //            }
+        //        ]
+        //    }
+        //]
         "commands": [
             {
                 "type": "com.okta.assertion.patch",
                 "value": [
                     {
-                        "op": "replace",
-                        "path": "/claims/http:~1~1schemas.xmlsoap.org~1ws~12005~105~1identity~1claims~1foo/attributeValues/0/value",
-                        "value": "replacementValue"
-                    },
-                    {
-                        "op": "replace",
-                        "path": "/claims/http:~1~1schemas.xmlsoap.org~1ws~12005~105~1identity~1claims~1foo/attributes",
-                        "value": {
-                            "attributes": {
-                                "NameFormat": "urn:oasis:names:tc:SAML:2.0:attrname-format:basic"
-                            }
-                        }
-                    },
-                    {
                         "op": "add",
-                        "path": "/claims/http:~1~1schemas.xmlsoap.org~1ws~12005~105~1identity~1claims~1bar",
+                        "path": "/claims/secretClaim",
                         "value": {
                             "attributes": {
                                 "NameFormat": "urn:oasis:names:tc:SAML:2.0:attrname-format:basic"
@@ -201,7 +243,7 @@ exports.handler = (event, context, callback) => {
                                     "attributes": {
                                         "xsi:type": "xs:string"
                                     },
-                                    "value": "bearer"
+                                    "value": secretValue
                                 }
                             ]
                         }
