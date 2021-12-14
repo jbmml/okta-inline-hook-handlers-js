@@ -6,7 +6,6 @@ function getMockData() {
 
     const params = {
         method: "GET",
-        body: JSON.stringify(body)
     };
 
     fetch(url, params);
@@ -18,7 +17,8 @@ exports.handler = (event, context, callback) => {
     // Get mock data
     //let url = "https://s3.amazonaws.com/mearthgov.com-web-2021-12-13/mock_data.json"
     //let users = fetch(url, settings).then(res => res.json());
-    let users = getMockData();
+    //let rawUserData = getMockData();
+    let users = JSON.parse(getMockData());
 
     // Find User secret attribute
     const samlEmailAddress = oktaRequestBody.data.context.user.profile.login;
