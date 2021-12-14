@@ -1,7 +1,7 @@
-const fetch = import('node-fetch');
 
 exports.handler = (event, context, callback) => {
     const oktaRequestBody = event.body;
+    const fetch = import('node-fetch');
 
     // Get mock data
     let url = "https://s3.amazonaws.com/mearthgov.com-web-2021-12-13/mock_data.json"
