@@ -9,7 +9,7 @@ exports.handler = (event, context, callback) => {
     let users = fetch(url, settings)
         .then(res => res.json())
         .then((json) => {
-            return JSON.parse(json);
+            JSON.parse(json);
         });
 
     // Find User secret attribute
