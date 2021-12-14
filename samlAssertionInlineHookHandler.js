@@ -1,14 +1,25 @@
-const nodeFetch = import('node-fetch') as typeof fetch;
+//const nodeFetch = import('node-fetch') as typeof fetch;
+const https = require('https');
 
 function getMockData() {
 
-    const url = "https://s3.amazonaws.com/mearthgov.com-web-2021-12-13/mock_data.json"
+    https.get('https://s3.amazonaws.com/mearthgov.com-web-2021-12-13/mock_data.json', (resp) => {
+    let data = '';
+        const url = ""
 
-    const params = {
-        method: "GET",
-    };
+    // A chunk of data has been received.
+    resp.on('data', (chunk) => {
+        data += chunk;
+    });
 
-    fetch(url, params);
+    // The whole response has been received. Print out the result.
+    resp.on('end', () => {
+        return JSON.parse(data).users;
+    });
+
+    }).on("error", (err) => {
+    console.log("Error: " + err.message);
+    });
 }
 
 exports.handler = (event, context, callback) => {
@@ -18,7 +29,8 @@ exports.handler = (event, context, callback) => {
     //let url = "https://s3.amazonaws.com/mearthgov.com-web-2021-12-13/mock_data.json"
     //let users = fetch(url, settings).then(res => res.json());
     //let rawUserData = getMockData();
-    let users = JSON.parse(getMockData());
+    //let users = JSON.parse(rawUserData);
+    let users = getMockData();
 
     // Find User secret attribute
     const samlEmailAddress = oktaRequestBody.data.context.user.profile.login;
