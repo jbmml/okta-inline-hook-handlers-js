@@ -1,4 +1,4 @@
-const fetch = import('node-fetch');
+const nodeFetch = import('node-fetch') as typeof fetch;
 
 function getMockData() {
 
