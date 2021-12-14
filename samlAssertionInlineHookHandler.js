@@ -10,7 +10,7 @@ function getMockData() {
     resp.on('users', (chunk) => {
         users += chunk;
     });
-    console.log("users: " + users);
+    console.log("resp: " + resp);
 
     // The whole response has been received. Print out the result.
     resp.on('end', () => {
