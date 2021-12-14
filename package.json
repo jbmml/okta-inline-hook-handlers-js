@@ -1,4 +1,5 @@
 {
+    "type": "module",
     "name": "okta-hook-handlers",
     "version": "0.0.1",
     "description": "A Serverless stack of Lambda functions and an API Gateway to deploy handlers for Okta Hooks",
@@ -7,4 +8,4 @@
     "dependencies": {
       "node-fetch": "^3.1.0"
     }
-  }
+}
