@@ -1,4 +1,4 @@
-const fetch = include('node-fetch');
+const fetch = import('node-fetch');
 
 function getMockData() {
 
