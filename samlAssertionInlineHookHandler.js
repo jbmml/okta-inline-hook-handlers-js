@@ -1,16 +1,16 @@
-function Get(yourUrl){
-    var Httpreq = new XMLHttpRequest(); // a new request
-    Httpreq.open("GET",yourUrl,false);
-    Httpreq.send(null);
-    return Httpreq.responseText;          
-}
+const fetch = require('node-fetch');
 
 exports.handler = (event, context, callback) => {
     const oktaRequestBody = event.body;
 
-    // Read mock data from files
-    let mockDataURL = "https://s3.amazonaws.com/mearthgov.com-web-2021-12-13/mock_data.json"
-    let users = JSON.parse(Get(mockDataURL));
+    // Get mock data
+    let url = "https://s3.amazonaws.com/mearthgov.com-web-2021-12-13/mock_data.json"
+    let settings = { method: "Get" };
+    let users = fetch(url, settings)
+        .then(res => res.json())
+        .then((json) => {
+            return JSON.parse(json);
+        });
 
     // Find User secret attribute
     const samlEmailAddress = oktaRequestBody.data.context.user.profile.login;
