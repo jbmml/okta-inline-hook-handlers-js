@@ -2,9 +2,8 @@
 const dbg = true;
 const https = require('https');
 
-function getMockData() {
+function getMockData(url, login, callback) {
     if(dbg){console.log("***Running getMockData()")};
-    let url = "https://s3.amazonaws.com/mearthgov.com-web-2021-12-13/mock_data.json";
 
     const usersArray = https.get(url, (resp) => {
         let userData = '';
@@ -18,30 +17,46 @@ function getMockData() {
         // The whole response has been received. Print out the result.
         resp.on('end', () => {
             if(dbg){console.log(`***userData: ${JSON.stringify(userStr, null, 4)}`)};
-            JSON.parse(userData).users;
+            userStr = JSON.stringify(usersArray, null, 4); // (Optional) beautiful indented output.
+            if(dbg){console.log("***Calling getUserSecret callback")};
+            callback(JSON.parse(userData), login);
         });
 
         }).on("error", (err) => {
             console.log("Error: " + err.message);
         });
-
-    userStr = JSON.stringify(usersArray, null, 4); // (Optional) beautiful indented output.
-    if(dbg){console.log(`***usersArray: ${userStr}`)};
+    
     if(dbg){console.log("***Ending getMockData()")};
 }
 
+
 exports.handler = (event, context, callback) => {
     const oktaRequestBody = event.body;
+
+    let url = "https://s3.amazonaws.com/mearthgov.com-web-2021-12-13/mock_data.json";
+    if(dbg){console.log("Calling getMockData()")};
+    let users = getMockData(url, function(mockData, loginString){
+
+        // Find User secret attribute
+        if(dbg){console.log("******Running getUserSecret callback")};
+        if(dbg){console.log(`******usersArray: ${mockData}`)};
+        if(dbg){console.log(`******loginString: ${loginString}`)};
+        //const samlEmailAddress = oktaRequestBody.data.context.user.profile.login;
+        //var mockDirUser = mockData.users.filter(u => u.email === samlEmailAddress);
+        //var userSecretData = mockDirUser[0].secret
+        //var secretValue = (userSecretData != "" ? userSecretData : "GENERIC_SECRET_VALUE");
+
+        if(dbg){console.log("******Leaving getUserSecret callback")};
+    });
+
+    if(dbg){console.log("Called getMockData()")};
+    if(dbg){console.log("users: " + users)};
 
     // Get mock data
     //let url = "https://s3.amazonaws.com/mearthgov.com-web-2021-12-13/mock_data.json"
     //let users = fetch(url, settings).then(res => res.json());
     //let rawUserData = getMockData();
     //let users = JSON.parse(rawUserData);
-    if(dbg){console.log("Calling getMockData()")};
-    let users = getMockData();
-    if(dbg){console.log("Called getMockData()")};
-    if(dbg){console.log("users: " + users)};
 
     // Find User secret attribute
     const samlEmailAddress = oktaRequestBody.data.context.user.profile.login;
