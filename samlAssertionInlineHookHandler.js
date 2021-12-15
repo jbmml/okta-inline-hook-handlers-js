@@ -2,7 +2,7 @@
 const dbg = true;
 const https = require('https');
 
-function getMockData(url, login, callback) {
+function getSecretValue(url, login, callback) {
     if(dbg){console.log("***Running getMockData()")};
 
     https.get(url, (resp) => {
@@ -20,7 +20,6 @@ function getMockData(url, login, callback) {
             if(dbg){console.log(`***userData: ${JSON.stringify(userStr, null, 4)}`)};
             userStr = JSON.stringify(usersArray, null, 4); // (Optional) beautiful indented output.
             if(dbg){console.log("***Calling getUserSecret callback")};
-            callback(JSON.parse(userData), login);
         });
 
         }).on("error", (err) => {
@@ -28,6 +27,7 @@ function getMockData(url, login, callback) {
         });
     
     //if(dbg){console.log(`***usersArray: ${JSON.stringify(usersArray, null, 4)}`)};
+    callback("userdata", login);
 
     if(dbg){console.log("***Ending getMockData()")};
 }
@@ -38,7 +38,7 @@ exports.handler = (event, context, callback) => {
 
     let url = "https://s3.amazonaws.com/mearthgov.com-web-2021-12-13/mock_data.json";
     if(dbg){console.log("Calling getMockData()")};
-    let users = getMockData(url, oktaRequestBody, function(mockData, loginString){
+    let secretValue = getMockData(url, oktaRequestBody, function(mockData, loginString){
 
         // Find User secret attribute
         if(dbg){console.log("******Running getUserSecret callback")};
