@@ -27,7 +27,7 @@ function getMockData(url, login, callback) {
             console.log("Error: " + err.message);
         });
     
-    if(dbg){console.log(`***usersArray: ${usersArray}`)};
+    if(dbg){console.log(`***usersArray: ${JSON.stringify(usersArray, null, 4)}`)};
 
     if(dbg){console.log("***Ending getMockData()")};
 }
