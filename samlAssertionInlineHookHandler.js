@@ -1,4 +1,5 @@
 //const nodeFetch = import('node-fetch') as typeof fetch;
+const dbg = true;
 const https = require('https');
 
 function getMockData() {
@@ -30,7 +31,9 @@ exports.handler = (event, context, callback) => {
     //let users = fetch(url, settings).then(res => res.json());
     //let rawUserData = getMockData();
     //let users = JSON.parse(rawUserData);
+    if(dbg){console.log("Calling getMockData()")};
     let users = getMockData();
+    if(dbg){console.log("Called getMockData()")};
 
     // Find User secret attribute
     const samlEmailAddress = oktaRequestBody.data.context.user.profile.login;
