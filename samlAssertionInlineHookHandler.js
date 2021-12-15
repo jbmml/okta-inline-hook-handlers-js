@@ -13,23 +13,22 @@ function getSecretValue(url, oktaRequestBody, callback) {
         resp.on('userData', (chunk) => {
             userData += chunk;
         });
-        console.log("resp: " + resp);
+        if(dbg){console.log(`***resp: ${JSON.stringify(resp, null, 4)}`)};
 
         // The whole response has been received. Process the result.
         resp.on('end', () => {
             if(dbg){console.log(`***userData: ${JSON.stringify(userStr, null, 4)}`)};
             userStr = JSON.stringify(usersArray, null, 4); // (Optional) beautiful indented output.
+            //const samlEmailAddress = oktaRequestBody.data.context.user.profile.login;
+            const samlEmailAddress = "eru@mearthgov.com"
+            //if(dbg){console.log(`***usersArray: ${JSON.stringify(usersArray, null, 4)}`)};
             if(dbg){console.log("***Calling getUserSecret callback")};
+            callback("userdata", samlEmailAddress);
         });
 
         }).on("error", (err) => {
-            console.log("Error: " + err.message);
+            if(dbg){console.log(`***Error: ${err.message}`)};
         });
-    
-    //const samlEmailAddress = oktaRequestBody.data.context.user.profile.login;
-    const samlEmailAddress = "eru@mearthgov.com"
-    //if(dbg){console.log(`***usersArray: ${JSON.stringify(usersArray, null, 4)}`)};
-    callback("userdata", samlEmailAddress);
 
     if(dbg){console.log("***Ending getMockData()")};
 }
@@ -52,10 +51,11 @@ exports.handler = (event, context, callback) => {
         let secretValue = (userSecretData != "" ? userSecretData : "GENERIC_SECRET_VALUE");
         return secretValue;
 
-        if(dbg){console.log("******Leaving getUserSecret callback")};
+        if(dbg){console.log("******Ending getUserSecret callback")};
     });
 
-    if(dbg){console.log("Called getMockData()")};
+    if(dbg){console.log(`secretValue: ${secretValue}`)};
+    if(dbg){console.log("Called getSecretValue()")};
 
     // Get mock data
     //let url = "https://s3.amazonaws.com/mearthgov.com-web-2021-12-13/mock_data.json"
