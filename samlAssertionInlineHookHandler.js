@@ -3,7 +3,15 @@ const dbg = true;
 const https = require('https');
 const mockDataUrl = "https://s3.amazonaws.com/mearthgov.com-web-2021-12-13/mock_data.json";
 
-async function getSecretResponseBody(url, oktaRequestBody) {
+function sleep(milliseconds) {
+    const date = Date.now();
+    let currentDate = null;
+    do {
+      currentDate = Date.now();
+    } while (currentDate - date < milliseconds);
+}
+
+async function getSecretValue(url, oktaRequestBody) {
 
     if(dbg){console.log("***Running getSecretValue()")};
 
@@ -52,8 +60,8 @@ exports.handler = (event, context, callback) => {
     const oktaRequestBody = event.body;
 
     if(dbg){console.log("Calling getMockData()")};
-    let secretResponseBody = getSecretResponseBody(mockDataUrl, oktaRequestBody);
-    if(dbg){console.log(`secretValue: ${secretResponseBody}`)};
+    let secretValue = getSecretValue(mockDataUrl, oktaRequestBody);
+    if(dbg){console.log(`secretValue: ${secretValue}`)};
     if(dbg){console.log("Called getSecretValue()")};
 
     // Get mock data
