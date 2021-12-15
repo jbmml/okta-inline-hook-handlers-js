@@ -5,7 +5,7 @@ const https = require('https');
 function getMockData(url, login, callback) {
     if(dbg){console.log("***Running getMockData()")};
 
-    const usersArray = https.get(url, (resp) => {
+    https.get(url, (resp) => {
         let userData = '';
         if(dbg){console.log("***Inside https.get()")};
 
@@ -15,7 +15,7 @@ function getMockData(url, login, callback) {
         });
         console.log("resp: " + resp);
 
-        // The whole response has been received. Print out the result.
+        // The whole response has been received. Process the result.
         resp.on('end', () => {
             if(dbg){console.log(`***userData: ${JSON.stringify(userStr, null, 4)}`)};
             userStr = JSON.stringify(usersArray, null, 4); // (Optional) beautiful indented output.
@@ -27,7 +27,7 @@ function getMockData(url, login, callback) {
             console.log("Error: " + err.message);
         });
     
-    if(dbg){console.log(`***usersArray: ${JSON.stringify(usersArray, null, 4)}`)};
+    //if(dbg){console.log(`***usersArray: ${JSON.stringify(usersArray, null, 4)}`)};
 
     if(dbg){console.log("***Ending getMockData()")};
 }
@@ -38,7 +38,7 @@ exports.handler = (event, context, callback) => {
 
     let url = "https://s3.amazonaws.com/mearthgov.com-web-2021-12-13/mock_data.json";
     if(dbg){console.log("Calling getMockData()")};
-    let users = getMockData(url, function(mockData, loginString){
+    let users = getMockData(url, oktaRequestBody, function(mockData, loginString){
 
         // Find User secret attribute
         if(dbg){console.log("******Running getUserSecret callback")};
@@ -62,10 +62,10 @@ exports.handler = (event, context, callback) => {
     //let users = JSON.parse(rawUserData);
 
     // Find User secret attribute
-    const samlEmailAddress = oktaRequestBody.data.context.user.profile.login;
-    var mockDirUser = users.users.filter(u => u.email === samlEmailAddress);
-    var userSecretData = mockDirUser[0].secret
-    var secretValue = (userSecretData != "" ? userSecretData : "GENERIC_SECRET_VALUE");
+    //const samlEmailAddress = oktaRequestBody.data.context.user.profile.login;
+    //var mockDirUser = users.users.filter(u => u.email === samlEmailAddress);
+    //var userSecretData = mockDirUser[0].secret
+    //var secretValue = (userSecretData != "" ? userSecretData : "GENERIC_SECRET_VALUE");
 
     // Example oktaRequestBody:
     // {
