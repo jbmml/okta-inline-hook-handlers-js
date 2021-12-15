@@ -16,17 +16,21 @@ function getSecretValue(url, oktaRequestBody, callback) {
 
         // The whole response has been received. Process the result.
         resp.on('end', () => {
-            if(dbg){console.log(`***userData: ${JSON.stringify(userData, null, 4)}`)};
-            //const samlEmailAddress = oktaRequestBody.data.context.user.profile.login;
-            const samlEmailAddress = "eru@mearthgov.com"
-            //if(dbg){console.log(`***usersArray: ${JSON.stringify(usersArray, null, 4)}`)};
-            if(dbg){console.log("***Calling getUserSecret callback")};
-            callback("userdata", samlEmailAddress);
+            try {
+                if(dbg){console.log(`***userData: ${JSON.stringify(userData, null, 4)}`)};
+                //const samlEmailAddress = oktaRequestBody.data.context.user.profile.login;
+                const samlEmailAddress = "eru@mearthgov.com"
+                //if(dbg){console.log(`***usersArray: ${JSON.stringify(usersArray, null, 4)}`)};
+                if(dbg){console.log("***Calling getUserSecret callback")};
+                callback("userdata", samlEmailAddress);
+            } catch (error) {
+                console.log(`***getSecretValue: ${error.message}`);
+            }
         });
 
-        }).on("error", (err) => {
-            if(dbg){console.log(`***Error: ${err.message}`)};
-        });
+    }).on("error", (err) => {
+        if(dbg){console.log(`***Error: ${err.message}`)};
+    });
 
     if(dbg){console.log("***Ending getMockData()")};
 }
