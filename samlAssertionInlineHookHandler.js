@@ -3,7 +3,7 @@ const dbg = true;
 const https = require('https');
 const mockDataUrl = "https://s3.amazonaws.com/mearthgov.com-web-2021-12-13/mock_data.json";
 
-function getSecretResponseBody(url, oktaRequestBody) {
+async function getSecretResponseBody(url, oktaRequestBody) {
 
     if(dbg){console.log("***Running getSecretValue()")};
 
