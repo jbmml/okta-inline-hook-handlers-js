@@ -17,11 +17,12 @@ function getMockData() {
 
         // The whole response has been received. Print out the result.
         resp.on('end', () => {
+            if(dbg){console.log(`***userData: ${JSON.stringify(userStr, null, 4)}`)};
             JSON.parse(userData).users;
         });
 
         }).on("error", (err) => {
-        console.log("Error: " + err.message);
+            console.log("Error: " + err.message);
         });
 
     userStr = JSON.stringify(usersArray, null, 4); // (Optional) beautiful indented output.
