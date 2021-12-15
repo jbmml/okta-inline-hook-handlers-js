@@ -34,6 +34,7 @@ exports.handler = (event, context, callback) => {
     if(dbg){console.log("Calling getMockData()")};
     let users = getMockData();
     if(dbg){console.log("Called getMockData()")};
+    if(dbg){console.log("users: " + users)};
 
     // Find User secret attribute
     const samlEmailAddress = oktaRequestBody.data.context.user.profile.login;
