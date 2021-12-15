@@ -7,6 +7,7 @@ function getMockData(url, login, callback) {
 
     const usersArray = https.get(url, (resp) => {
         let userData = '';
+        if(dbg){console.log("***Inside https.get()")};
 
         // A chunk of data has been received.
         resp.on('userData', (chunk) => {
@@ -26,6 +27,8 @@ function getMockData(url, login, callback) {
             console.log("Error: " + err.message);
         });
     
+    if(dbg){console.log(`***usersArray: ${usersArray}`)};
+
     if(dbg){console.log("***Ending getMockData()")};
 }
 
