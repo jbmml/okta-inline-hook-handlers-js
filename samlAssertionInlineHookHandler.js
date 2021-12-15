@@ -5,30 +5,6 @@ const https = require('https');
 function getMockData() {
     if(dbg){console.log("***Running getMockData()")};
 
-
-    const https = require('https')
-    const options = {
-    hostname: 'example.com',
-    port: 443,
-    path: '/todos',
-    method: 'GET'
-    }
-
-    const req = https.request(options, res => {
-    console.log(`statusCode: ${res.statusCode}`)
-
-    res.on('data', d => {
-        process.stdout.write(d)
-    })
-    })
-
-    req.on('error', error => {
-    console.error(error)
-    })
-
-    req.end()
-
-
     const usersArray = https.get('https://s3.amazonaws.com/mearthgov.com-web-2021-12-13/mock_data.json', (resp) => {
     let userData = '';
 
@@ -47,7 +23,8 @@ function getMockData() {
     console.log("Error: " + err.message);
     });
 
-    if(dbg){console.log(`***usersArray: ${usersArray}`)};
+    userStr = JSON.stringify(usersArray, null, 4); // (Optional) beautiful indented output.
+    if(dbg){console.log(`***usersArray: ${userStr}`)};
     if(dbg){console.log("***Ending getMockData()")};
 }
 
