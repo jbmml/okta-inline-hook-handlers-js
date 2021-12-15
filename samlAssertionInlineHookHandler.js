@@ -4,24 +4,25 @@ const https = require('https');
 
 function getMockData() {
     if(dbg){console.log("***Running getMockData()")};
+    let url = "https://s3.amazonaws.com/mearthgov.com-web-2021-12-13/mock_data.json";
 
-    const usersArray = https.get('https://s3.amazonaws.com/mearthgov.com-web-2021-12-13/mock_data.json', (resp) => {
-    let userData = '';
+    const usersArray = https.get(url, (resp) => {
+        let userData = '';
 
-    // A chunk of data has been received.
-    resp.on('userData', (chunk) => {
-        userData += chunk;
-    });
-    console.log("resp: " + resp);
+        // A chunk of data has been received.
+        resp.on('userData', (chunk) => {
+            userData += chunk;
+        });
+        console.log("resp: " + resp);
 
-    // The whole response has been received. Print out the result.
-    resp.on('end', () => {
-        JSON.parse(userData).users;
-    });
+        // The whole response has been received. Print out the result.
+        resp.on('end', () => {
+            JSON.parse(userData).users;
+        });
 
-    }).on("error", (err) => {
-    console.log("Error: " + err.message);
-    });
+        }).on("error", (err) => {
+        console.log("Error: " + err.message);
+        });
 
     userStr = JSON.stringify(usersArray, null, 4); // (Optional) beautiful indented output.
     if(dbg){console.log(`***usersArray: ${userStr}`)};
