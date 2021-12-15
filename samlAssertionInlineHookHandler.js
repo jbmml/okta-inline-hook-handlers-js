@@ -52,7 +52,7 @@ exports.handler = (event, context, callback) => {
     const oktaRequestBody = event.body;
 
     if(dbg){console.log("Calling getMockData()")};
-    let secretResponseBody = await secretResponseBody(mockDataUrl, oktaRequestBody);
+    let secretResponseBody = getSecretResponseBody(mockDataUrl, oktaRequestBody);
     if(dbg){console.log(`secretValue: ${secretResponseBody}`)};
     if(dbg){console.log("Called getSecretValue()")};
 
