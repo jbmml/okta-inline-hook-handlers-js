@@ -13,12 +13,10 @@ function getSecretValue(url, oktaRequestBody, callback) {
         resp.on('userData', (chunk) => {
             userData += chunk;
         });
-        if(dbg){console.log(`***resp: ${JSON.stringify(resp, null, 4)}`)};
 
         // The whole response has been received. Process the result.
         resp.on('end', () => {
-            if(dbg){console.log(`***userData: ${JSON.stringify(userStr, null, 4)}`)};
-            userStr = JSON.stringify(usersArray, null, 4); // (Optional) beautiful indented output.
+            if(dbg){console.log(`***userData: ${JSON.stringify(userData, null, 4)}`)};
             //const samlEmailAddress = oktaRequestBody.data.context.user.profile.login;
             const samlEmailAddress = "eru@mearthgov.com"
             //if(dbg){console.log(`***usersArray: ${JSON.stringify(usersArray, null, 4)}`)};
