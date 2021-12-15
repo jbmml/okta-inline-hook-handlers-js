@@ -48,13 +48,14 @@ exports.handler = (event, context, callback) => {
         if(dbg){console.log(`******loginString: ${loginString}`)};
         //var mockDirUser = mockData.users.filter(u => u.email === samlEmailAddress);
         //var userSecretData = mockDirUser[0].secret
-        //var secretValue = (userSecretData != "" ? userSecretData : "GENERIC_SECRET_VALUE");
+        let userSecretData = "";
+        let secretValue = (userSecretData != "" ? userSecretData : "GENERIC_SECRET_VALUE");
+        return secretValue;
 
         if(dbg){console.log("******Leaving getUserSecret callback")};
     });
 
     if(dbg){console.log("Called getMockData()")};
-    if(dbg){console.log("users: " + users)};
 
     // Get mock data
     //let url = "https://s3.amazonaws.com/mearthgov.com-web-2021-12-13/mock_data.json"
