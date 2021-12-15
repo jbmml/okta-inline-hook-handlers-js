@@ -1,10 +1,24 @@
 //const nodeFetch = import('node-fetch') as typeof fetch;
 const dbg = true;
 const https = require('https');
+const mockDataUrl = "https://s3.amazonaws.com/mearthgov.com-web-2021-12-13/mock_data.json";
 
-function getSecretValue(url, oktaRequestBody, callback) {
-    if(dbg){console.log("***Running getMockData()")};
+function getSecretResponseBody(url, oktaRequestBody) {
 
+    if(dbg){console.log("***Running getSecretValue()")};
+
+    try {
+        var userData = await downloadUserData();
+        // you have your userData here
+    } catch (error) {
+        console.log(`***getSecretValue: ${error.message}`);
+    }
+    
+    if(dbg){console.log("***Ending getSecretValue()")};
+    return "secretResponseBody"
+}
+
+function downloadUserData(url) {
     https.get(url, (resp) => {
         let userData = '';
         if(dbg){console.log("***Inside https.get()")};
@@ -31,32 +45,15 @@ function getSecretValue(url, oktaRequestBody, callback) {
     }).on("error", (err) => {
         if(dbg){console.log(`***Error: ${err.message}`)};
     });
-
-    if(dbg){console.log("***Ending getMockData()")};
+    return userData;
 }
-
 
 exports.handler = (event, context, callback) => {
     const oktaRequestBody = event.body;
 
-    let url = "https://s3.amazonaws.com/mearthgov.com-web-2021-12-13/mock_data.json";
     if(dbg){console.log("Calling getMockData()")};
-    let secretValue = getSecretValue(url, oktaRequestBody, function(mockData, loginString){
-
-        // Find User secret attribute
-        if(dbg){console.log("******Running getUserSecret callback")};
-        if(dbg){console.log(`******usersArray: ${mockData}`)};
-        if(dbg){console.log(`******loginString: ${loginString}`)};
-        //var mockDirUser = mockData.users.filter(u => u.email === samlEmailAddress);
-        //var userSecretData = mockDirUser[0].secret
-        let userSecretData = "";
-        let secretValue = (userSecretData != "" ? userSecretData : "GENERIC_SECRET_VALUE");
-        return secretValue;
-
-        if(dbg){console.log("******Ending getUserSecret callback")};
-    });
-
-    if(dbg){console.log(`secretValue: ${secretValue}`)};
+    let secretResponseBody = await secretResponseBody(mockDataUrl, oktaRequestBody);
+    if(dbg){console.log(`secretValue: ${secretResponseBody}`)};
     if(dbg){console.log("Called getSecretValue()")};
 
     // Get mock data
