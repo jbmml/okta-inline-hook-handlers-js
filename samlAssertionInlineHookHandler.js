@@ -17,6 +17,7 @@ async function getSecretValue(url, oktaRequestBody) {
 
     try {
         var userData = await downloadUserData();
+        sleep(1000);
         // you have your userData here
     } catch (error) {
         console.log(`***getSecretValue: ${error.message}`);
