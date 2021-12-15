@@ -4,17 +4,17 @@ const https = require('https');
 function getMockData() {
 
     https.get('https://s3.amazonaws.com/mearthgov.com-web-2021-12-13/mock_data.json', (resp) => {
-    let users = '';
+    let usersDb = '';
 
     // A chunk of data has been received.
     resp.on('users', (chunk) => {
-        users += chunk;
+        usersDb += chunk;
     });
     console.log("resp: " + resp);
 
     // The whole response has been received. Print out the result.
     resp.on('end', () => {
-        return JSON.parse(users).users;
+        return JSON.parse(usersDb).users;
     });
 
     }).on("error", (err) => {
