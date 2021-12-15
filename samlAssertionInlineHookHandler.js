@@ -3,24 +3,52 @@ const dbg = true;
 const https = require('https');
 
 function getMockData() {
+    if(dbg){console.log("***Running getMockData()")};
 
-    https.get('https://s3.amazonaws.com/mearthgov.com-web-2021-12-13/mock_data.json', (resp) => {
-    let usersDb = '';
+
+    const https = require('https')
+    const options = {
+    hostname: 'example.com',
+    port: 443,
+    path: '/todos',
+    method: 'GET'
+    }
+
+    const req = https.request(options, res => {
+    console.log(`statusCode: ${res.statusCode}`)
+
+    res.on('data', d => {
+        process.stdout.write(d)
+    })
+    })
+
+    req.on('error', error => {
+    console.error(error)
+    })
+
+    req.end()
+
+
+    const usersArray = https.get('https://s3.amazonaws.com/mearthgov.com-web-2021-12-13/mock_data.json', (resp) => {
+    let userData = '';
 
     // A chunk of data has been received.
-    resp.on('users', (chunk) => {
-        usersDb += chunk;
+    resp.on('userData', (chunk) => {
+        userData += chunk;
     });
     console.log("resp: " + resp);
 
     // The whole response has been received. Print out the result.
     resp.on('end', () => {
-        return JSON.parse(usersDb).users;
+        JSON.parse(usersDb).users;
     });
 
     }).on("error", (err) => {
     console.log("Error: " + err.message);
     });
+
+    if(dbg){console.log(`***usersArray: ${usersArray}`)};
+    if(dbg){console.log("***Ending getMockData()")};
 }
 
 exports.handler = (event, context, callback) => {
